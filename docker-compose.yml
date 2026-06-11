@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  audit-engine:
+    image: code-audit-engine:latest
+    build: .
+    environment:
+      - MODEL_TIER=op48
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/app
+  validator-worker:
+    image: validator-base:1.2
+    environment:
+      - WORKER_MODE=strict
