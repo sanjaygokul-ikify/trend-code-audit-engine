@@ -1,0 +1,15 @@
+audit:
+  model: opus_48
+  parallelism: 4
+  validation:
+    max_depth: 5
+    timeout: 10s
+    falsification_attempts: 3
+security:
+  validation_mode: strict
+  code_sandbox: true
+output:
+  format: evidence_map
+  storage: local
+  validation:
+    require_proofs: true
