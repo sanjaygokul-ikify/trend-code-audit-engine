@@ -30,7 +30,11 @@ class CodeAuditEngine:
         # and returns a list of dictionaries containing the results
         analysis_results = []
         for file in code_base.files:
-            analysis_results.append({'file': file.name, 'issues': self._analyze_file(file)})
+            try:
+                analysis_results.append({'file': file, 'issues': self._analyze_file(file)})
+            except Exception as e:
+                logger.error(f'Failed to analyze file {file}: {e}')
+                analysis_results.append({'file': file, 'issues': ['Error occurred during analysis']})
         return analysis_results
     
     def _analyze_file(self, file) -> List[str]:
