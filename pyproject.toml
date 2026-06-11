@@ -1,0 +1,13 @@
+[build-system]
+requires = ["poetry-core>=2.0.0"]
+toml.tool.poetry = {
+  name = "code-audit-engine",
+  version = "0.1.0",
+  description = "Autonomous code validation system",
+  authors = ["Architect <dev@example.com>"],
+  dependencies = {
+    "fastapi": "^0.68.0",
+    "uvicorn": "^0.18.2",
+    "model-compiler": "*"
+  }
+}
