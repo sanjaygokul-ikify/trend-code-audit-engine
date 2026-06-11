@@ -1,0 +1,1 @@
+# Standard ignores\n__pycache__/\ntmp/*\n*.log\n\n# Project specific\n.env\nsecrets/*\nworkloads/
