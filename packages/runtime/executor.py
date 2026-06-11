@@ -26,7 +26,11 @@ class RuntimeExecutor:
         # and returns the results
         results = []
         for file in audit_plan.files_to_audit:
-            results.append(self._execute_file(file))
+            try:
+                results.append(self._execute_file(file))
+            except Exception as e:
+                logger.error(f'Failed to execute file {file}: {e}')
+                results.append(f'Error occurred during execution: {e}')
         return results
     
     def _execute_file(self, file) -> str:
