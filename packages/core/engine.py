@@ -62,20 +62,6 @@ class CodeAuditEngine:
                 audit_plan.files_to_audit.append(result['file'])
         return audit_plan
     
-    def _check_syntax(self, file) -> bool:
-        # Check the syntax of a file
-        # This could involve parsing the file, checking for syntax errors, etc.
-        # For simplicity, let's assume we have a function that checks the syntax
-        # and returns True if the syntax is valid, False otherwise
-        return True
-    
-    def _check_types(self, file) -> bool:
-        # Check the types of a file
-        # This could involve parsing the file, checking for type errors, etc.
-        # For simplicity, let's assume we have a function that checks the types
-        # and returns True if the types are valid, False otherwise
-        return True
-    
     def validate(self) -> RiskMatrix:
         # Validate the code base based on the audit plan
         try:
@@ -120,9 +106,31 @@ class CodeAuditEngine:
                 risk_matrix.files_with_risks.append(result['file'])
         return risk_matrix
     
+    def _check_syntax(self, file) -> bool:
+        # Check the syntax of a file
+        # This could involve parsing the file, checking for syntax errors, etc.
+        # For simplicity, let's assume we have a function that checks the syntax
+        # and returns True if the syntax is valid, False otherwise
+        return True
+    
+    def _check_types(self, file) -> bool:
+        # Check the types of a file
+        # This could involve parsing the file, checking for type errors, etc.
+        # For simplicity, let's assume we have a function that checks the types
+        # and returns True if the types are valid, False otherwise
+        return True
+    
     def _check_runtime_errors(self, file) -> bool:
         # Check a file for runtime errors
         # This could involve executing the file, checking for errors, etc.
         # For simplicity, let's assume we have a function that checks for runtime errors
         # and returns True if there are no errors, False otherwise
-        return True
+        try:
+            # Try to execute the file
+            with open(file, 'r') as f:
+                exec(f.read())
+            return True
+        except Exception as e:
+            # If an exception occurs during execution, return False
+            logger.error(f'Runtime error occurred in file {file}: {e}')
+            return False
