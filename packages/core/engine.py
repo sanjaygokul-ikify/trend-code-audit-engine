@@ -128,7 +128,7 @@ class CodeAuditEngine:
         try:
             # Try to execute the file
             with open(file, 'r') as f:
-                exec(f.read())
+                exec(f.read(), {}, {})  # <--- Added {} as default namespace and global variables
             return True
         except Exception as e:
             # If an exception occurs during execution, return False
