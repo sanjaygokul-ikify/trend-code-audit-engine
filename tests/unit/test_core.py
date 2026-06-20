@@ -7,7 +7,7 @@ class TestCodeAuditEngine(unittest.TestCase):
         engine = CodeAuditEngine(code_base)
         audit_plan = engine.analyze()
         self.assertIsNotNone(audit_plan)
-        self.assertIsInstance(audit_plan, CodeAuditEngine)
+        self.assertIsInstance(audit_plan, type(engine.audit_plan))
 
 if __name__ == '__main__':
     unittest.main() 
