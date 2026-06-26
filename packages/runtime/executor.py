@@ -2,6 +2,7 @@ from typing import List
 from ..core.types import CodeBase, AuditPlan, RiskMatrix
 from ..core.exceptions import AuditException, ValidationException
 import logging
+import signal
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +28,11 @@ class RuntimeExecutor:
         results = []
         for file in audit_plan.files_to_audit:
             try:
-                results.append(self._execute_file(file))
+                signal.signal(signal.SIGALRM, self._timeout_handler)
+                signal.alarm(10)  # 10 second timeout
+                result = self._execute_file(file)
+                signal.alarm(0)
+                results.append(result)
             except Exception as e:
                 logger.error(f'Failed to execute file {file}: {e}')
                 results.append(f'Error occurred during execution: {e}')
@@ -39,3 +44,6 @@ class RuntimeExecutor:
         # For simplicity, let's assume we have a function that executes a file
         # and returns the result
         return 'File executed successfully'
+    
+    def _timeout_handler(self, signum, frame):
+        raise TimeoutError('Execution timed out')
