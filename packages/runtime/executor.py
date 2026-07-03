@@ -33,6 +33,10 @@ class RuntimeExecutor:
                 result = self._execute_file(file)
                 signal.alarm(0)
                 results.append(result)
+            except TimeoutError:
+                # Handle timeout error
+                logger.error(f'Execution of file {file} timed out')
+                results.append(f'Error: Execution of file {file} timed out')
             except Exception as e:
                 logger.error(f'Failed to execute file {file}: {e}')
                 results.append(f'Error occurred during execution: {e}')
