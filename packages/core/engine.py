@@ -91,7 +91,12 @@ class CodeAuditEngine:
         # and returns a list of issues
         issues = []
         # Check for runtime errors
-        if not self._check_runtime_errors(file):
+        try:
+            with open(file, 'r') as f:
+                exec(f.read(), {}, {})  # <--- Added {} as default namespace and global variables
+        except Exception as e:
+            # If an exception occurs during execution, return False
+            logger.error(f'Runtime error occurred in file {file}: {e}')
             issues.append('Runtime error')
         return issues
     
@@ -111,22 +116,26 @@ class CodeAuditEngine:
         # This could involve parsing the file, checking for syntax errors, etc.
         # For simplicity, let's assume we have a function that checks the syntax
         # and returns True if the syntax is valid, False otherwise
-        return True
-    
+        try:
+            with open(file, 'r') as f:
+                compile(f.read(), file, 'exec')
+            return True
+        except SyntaxError:
+            return False
+
     def _check_types(self, file) -> bool:
         # Check the types of a file
         # This could involve parsing the file, checking for type errors, etc.
         # For simplicity, let's assume we have a function that checks the types
         # and returns True if the types are valid, False otherwise
         return True
-    
+
     def _check_runtime_errors(self, file) -> bool:
         # Check a file for runtime errors
         # This could involve executing the file, checking for errors, etc.
         # For simplicity, let's assume we have a function that checks for runtime errors
         # and returns True if there are no errors, False otherwise
         try:
-            # Try to execute the file
             with open(file, 'r') as f:
                 exec(f.read(), {}, {})  # <--- Added {} as default namespace and global variables
             return True
