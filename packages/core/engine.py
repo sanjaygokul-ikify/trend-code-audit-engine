@@ -81,7 +81,11 @@ class CodeAuditEngine:
         # and returns a list of dictionaries containing the results
         analysis_results = []
         for file in audit_plan.files_to_audit:
-            analysis_results.append({'file': file, 'issues': self._analyze_file_dynamically(file)})
+            try:
+                analysis_results.append({'file': file, 'issues': self._analyze_file_dynamically(file)})
+            except Exception as e:
+                logger.error(f'Failed to analyze file {file} dynamically: {e}')
+                analysis_results.append({'file': file, 'issues': ['Error occurred during dynamic analysis']})
         return analysis_results
     
     def _analyze_file_dynamically(self, file) -> List[str]:
