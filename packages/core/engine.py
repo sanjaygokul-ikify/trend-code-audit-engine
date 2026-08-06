@@ -124,7 +124,8 @@ class CodeAuditEngine:
             with open(file, 'r') as f:
                 compile(f.read(), file, 'exec')
             return True
-        except SyntaxError:
+        except SyntaxError as e:
+            logger.error(f'Syntax error occurred in file {file}: {e}')
             return False
 
     def _check_types(self, file) -> bool:
